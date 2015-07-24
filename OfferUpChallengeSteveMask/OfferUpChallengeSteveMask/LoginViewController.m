@@ -80,7 +80,7 @@
             
             if (error) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Login Error"
-                                                                message:@""
+                                                                message:@"Would you like to try again?"
                                                                delegate:self
                                                       cancelButtonTitle:@"Cancel"
                                                       otherButtonTitles:@"Retry", nil];
@@ -91,9 +91,6 @@
             }
         }];
     }
-}
-
-- (IBAction)uploadImages:(UIButton *)sender {
 }
 
 @end

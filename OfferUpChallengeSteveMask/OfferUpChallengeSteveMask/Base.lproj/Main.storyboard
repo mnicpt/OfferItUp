@@ -37,7 +37,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="uploadImages:" destination="BYZ-38-t0r" eventType="touchUpInside" id="QpQ-D2-2n9"/>
+                                    <segue destination="0BY-h9-qvl" kind="show" id="74t-de-J0N"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -72,13 +72,92 @@
                     <view key="view" contentMode="scaleToFill" id="3nn-hK-hg2">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Let's post some pictures!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lOr-t8-rdj">
+                                <rect key="frame" x="203" y="114" width="194" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="QUw-ys-0zn"/>
+                                    <constraint firstAttribute="width" constant="194" id="wZH-B5-Cg6"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Ic-dj-ZdT">
+                                <rect key="frame" x="229" y="550" width="142" height="30"/>
+                                <state key="normal" title="Upload To Facebook">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="JK2-Aa-hg4" firstAttribute="top" secondItem="1Ic-dj-ZdT" secondAttribute="bottom" constant="20" id="8kd-qH-MZ2"/>
+                            <constraint firstItem="lOr-t8-rdj" firstAttribute="top" secondItem="7vT-zn-bhV" secondAttribute="bottom" constant="50" id="Gtw-FU-jOa"/>
+                            <constraint firstAttribute="centerX" secondItem="lOr-t8-rdj" secondAttribute="centerX" id="bZ6-Qb-Vbl"/>
+                            <constraint firstAttribute="centerX" secondItem="1Ic-dj-ZdT" secondAttribute="centerX" id="nQN-hW-Qoh"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="oJd-zH-FqM"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y3h-om-kNr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2547" y="313"/>
+        </scene>
+        <!--Confirmation View Controller-->
+        <scene sceneID="zIA-oY-V6B">
+            <objects>
+                <viewController id="e6k-Gf-jUh" customClass="ConfirmationViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="cV4-43-KIw"/>
+                        <viewControllerLayoutGuide type="bottom" id="Xha-Nx-j3A"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="1at-TN-wiL">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="!!! Congrats !!!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KW3-lr-eNG">
+                                <rect key="frame" x="238" y="114" width="125" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="125" id="1XV-sq-JTf"/>
+                                    <constraint firstAttribute="height" constant="21" id="ms0-Cc-f6f"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You're done! :D" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FZQ-rX-Uym">
+                                <rect key="frame" x="241" y="289" width="118" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="LXH-Kb-so5"/>
+                                    <constraint firstAttribute="width" constant="118" id="gqT-ss-rww"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cZv-Do-DzL">
+                                <rect key="frame" x="282" y="550" width="37" height="30"/>
+                                <state key="normal" title="Done">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="KW3-lr-eNG" secondAttribute="centerX" id="4Ik-PX-JQ4"/>
+                            <constraint firstAttribute="centerX" secondItem="FZQ-rX-Uym" secondAttribute="centerX" id="FIm-U0-dfX"/>
+                            <constraint firstAttribute="centerX" secondItem="cZv-Do-DzL" secondAttribute="centerX" id="PX8-kY-sWD"/>
+                            <constraint firstItem="KW3-lr-eNG" firstAttribute="top" secondItem="cV4-43-KIw" secondAttribute="bottom" constant="50" id="jRN-1t-Nlh"/>
+                            <constraint firstAttribute="centerY" secondItem="FZQ-rX-Uym" secondAttribute="centerY" constant="0.5" id="qHS-vV-71Q"/>
+                            <constraint firstItem="Xha-Nx-j3A" firstAttribute="top" secondItem="cZv-Do-DzL" secondAttribute="bottom" constant="20" id="zYV-tH-1a4"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="TJI-mn-e94"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Nuu-7v-RsB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4043" y="313"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="N6i-Kc-WXx">
@@ -115,6 +194,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MWm-32-qXa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1735" y="313"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="txB-NC-hf1">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="hTJ-d3-gF0" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="UEC-6E-bCH">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="e6k-Gf-jUh" kind="relationship" relationship="rootViewController" id="CXk-4v-yOl"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="y9Q-WF-XUR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3231" y="313"/>
         </scene>
     </scenes>
 </document>

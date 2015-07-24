@@ -19,6 +19,7 @@
 		5A3AE4761B61D16A0059F0F8 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A3AE4731B61D16A0059F0F8 /* FBSDKCoreKit.framework */; };
 		5A3AE4771B61D16A0059F0F8 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A3AE4741B61D16A0059F0F8 /* FBSDKLoginKit.framework */; };
 		5A3AE4781B61D16A0059F0F8 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A3AE4751B61D16A0059F0F8 /* FBSDKShareKit.framework */; };
+		5A3AE47B1B61E7AC0059F0F8 /* ConfirmationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A3AE47A1B61E7AC0059F0F8 /* ConfirmationViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,8 @@
 		5A3AE4731B61D16A0059F0F8 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../../FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		5A3AE4741B61D16A0059F0F8 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../../FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		5A3AE4751B61D16A0059F0F8 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = ../../../FacebookSDK/FBSDKShareKit.framework; sourceTree = "<group>"; };
+		5A3AE4791B61E7AC0059F0F8 /* ConfirmationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfirmationViewController.h; sourceTree = "<group>"; };
+		5A3AE47A1B61E7AC0059F0F8 /* ConfirmationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfirmationViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +142,8 @@
 		5A3AE4721B61CCC90059F0F8 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				5A3AE4791B61E7AC0059F0F8 /* ConfirmationViewController.h */,
+				5A3AE47A1B61E7AC0059F0F8 /* ConfirmationViewController.m */,
 				5A3AE4501B61CBB70059F0F8 /* ImageLoaderViewController.h */,
 				5A3AE4511B61CBB70059F0F8 /* ImageLoaderViewController.m */,
 				5A3AE46F1B61CCC10059F0F8 /* LoginViewController.h */,
@@ -248,6 +253,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A3AE44C1B61CBB70059F0F8 /* AppDelegate.m in Sources */,
+				5A3AE47B1B61E7AC0059F0F8 /* ConfirmationViewController.m in Sources */,
 				5A3AE44F1B61CBB70059F0F8 /* OfferUpChallengeSteveMask.xcdatamodeld in Sources */,
 				5A3AE4521B61CBB70059F0F8 /* ImageLoaderViewController.m in Sources */,
 				5A3AE4491B61CBB70059F0F8 /* main.m in Sources */,
