@@ -83,11 +83,11 @@
             [self.buttons[self.selectedButton] setBackgroundImage:thumbnail forState:UIControlStateNormal];
             
             self.selectedButton++;
-            [self.buttons[self.selectedButton] setEnabled:YES];
-            
-            if ((self.buttons.count - 1) <= self.selectedButton + 1) {
-                [self.buttons[self.selectedButton + 1] setBackgroundImage:[UIImage imageNamed:@"icon_ImageBox" ]];
+            if ((self.buttons.count - 1) >= self.selectedButton) {
+                [self.buttons[self.selectedButton] setEnabled:YES];
             }
+            
+
         }
     }
     

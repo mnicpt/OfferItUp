@@ -102,6 +102,7 @@
                                 <state key="normal" backgroundImage="icon_ImageBox">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <state key="disabled" backgroundImage="icon_ImageBox_disabled"/>
                                 <connections>
                                     <action selector="loadImage:" destination="wwL-5V-h8d" eventType="touchUpInside" id="ayc-JT-5R1"/>
                                 </connections>
@@ -112,9 +113,10 @@
                                     <constraint firstAttribute="width" constant="60" id="CFo-ed-X03"/>
                                     <constraint firstAttribute="height" constant="60" id="tkm-jB-iDM"/>
                                 </constraints>
-                                <state key="normal" backgroundImage="icon_ImageBox_disabled">
+                                <state key="normal" backgroundImage="icon_ImageBox">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <state key="disabled" backgroundImage="icon_ImageBox_disabled"/>
                                 <connections>
                                     <action selector="loadImage:" destination="wwL-5V-h8d" eventType="touchUpInside" id="sO8-wd-bPJ"/>
                                 </connections>
@@ -125,9 +127,10 @@
                                     <constraint firstAttribute="width" constant="60" id="Tbp-pF-JBK"/>
                                     <constraint firstAttribute="height" constant="60" id="hg4-tN-C4f"/>
                                 </constraints>
-                                <state key="normal" backgroundImage="icon_ImageBox_disabled">
+                                <state key="normal" backgroundImage="icon_ImageBox">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <state key="disabled" backgroundImage="icon_ImageBox_disabled"/>
                                 <connections>
                                     <action selector="loadImage:" destination="wwL-5V-h8d" eventType="touchUpInside" id="DB0-h3-nJ0"/>
                                 </connections>
@@ -138,9 +141,10 @@
                                     <constraint firstAttribute="width" constant="60" id="1aT-Ka-IXH"/>
                                     <constraint firstAttribute="height" constant="60" id="kzc-lr-Mcx"/>
                                 </constraints>
-                                <state key="normal" backgroundImage="icon_ImageBox_disabled">
+                                <state key="normal" backgroundImage="icon_ImageBox">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <state key="disabled" backgroundImage="icon_ImageBox_disabled"/>
                                 <connections>
                                     <action selector="loadImage:" destination="wwL-5V-h8d" eventType="touchUpInside" id="47W-7V-rQg"/>
                                 </connections>
