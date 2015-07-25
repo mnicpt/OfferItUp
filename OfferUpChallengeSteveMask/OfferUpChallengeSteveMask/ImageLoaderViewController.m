@@ -28,6 +28,8 @@
     
     self.buttons = @[self.firstImageBtn, self.secondImageBtn, self.thirdImageBtn, self.fourthImageBtn];
     self.selectedButton = 0;
+    
+    [self loadImages];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -43,6 +45,8 @@
 #pragma mark - Actions
 
 - (IBAction)loadImage:(UIButton *)sender {
+    self.selectedButton = (int)sender.tag;
+    
     UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:@"Choose image capture option" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
     UIAlertAction *photoLibraryAction = [UIAlertAction actionWithTitle:@"Photo Library" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
@@ -86,8 +90,6 @@
             if ((self.buttons.count - 1) >= self.selectedButton) {
                 [self.buttons[self.selectedButton] setEnabled:YES];
             }
-            
-
         }
     }
     
@@ -123,7 +125,11 @@
                 // Request new album if not present
                 albumChangeRequest = [PHAssetCollectionChangeRequest creationRequestForAssetCollectionWithTitle:album];
             }
-
+            // remove asset of one exists
+            if (assetCollection.estimatedAssetCount > self.selectedButton) {
+                [albumChangeRequest removeAssetsAtIndexes:[NSIndexSet indexSetWithIndex:self.selectedButton]];
+            }
+            
             // Request creating an asset from the image.
             PHAssetChangeRequest *createAssetRequest = [PHAssetChangeRequest creationRequestForAssetFromImage:image];
             
@@ -135,10 +141,33 @@
             NSLog(@"Finished adding asset. %@", (success ? @"Success" : error));
         }];
     } else {
-        ALAssetsLibrary* assetsLibrary = [[ALAssetsLibrary alloc] init];
-        [assetsLibrary writeImageToSavedPhotosAlbum:image.CGImage metadata:nil completionBlock:^(NSURL *assetURL, NSError *error) {
+        __block ALAssetsGroup *groupAlbum = nil;
+        ALAssetsLibrary *assetsLibrary = [[ALAssetsLibrary alloc] init];
+        [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupAlbum usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
             
+            if ([[group valueForProperty:ALAssetsGroupPropertyName] isEqualToString:album]) {
+                groupAlbum = group;
+                *stop = YES;
+            }
+        } failureBlock:^(NSError *error) {
+            NSLog(@"Failed to enumerate over assets library.");
         }];
+        
+        if (groupAlbum) {
+            ALAsset *asset = [[ALAsset alloc] init];
+            [asset setImageData:UIImagePNGRepresentation(image) metadata:nil completionBlock:nil];
+            [groupAlbum addAsset:asset];
+        } else {
+            [assetsLibrary addAssetsGroupAlbumWithName:album resultBlock:^(ALAssetsGroup *group) {
+                
+                ALAsset *asset = [[ALAsset alloc] init];
+                [asset setImageData:UIImagePNGRepresentation(image) metadata:nil completionBlock:nil];
+                [group addAsset:asset];
+                
+            } failureBlock:^(NSError *error) {
+                NSLog(@"Failed to create album");
+            }];
+        }
     }
 }
 
@@ -168,6 +197,30 @@
     } else {
         // sorry you deleted your Photos app
     }
+}
+
+-(void)loadImages {
+    ALAssetsLibrary* assetsLibrary = [[ALAssetsLibrary alloc] init];
+    [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupAlbum usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
+        
+        if ([[group valueForProperty:ALAssetsGroupPropertyName] isEqualToString:@"OfferUp"]) {
+            [group enumerateAssetsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, group.numberOfAssets)] options:NSEnumerationConcurrent usingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
+                
+                if (index <= (self.buttons.count - 1)) {
+                    [self.buttons[index] setBackgroundImage:[UIImage imageWithCGImage:result.thumbnail] forState:UIControlStateNormal];
+                    [self.buttons[index] setEnabled:YES];
+                    
+                    if (index <= (self.buttons.count - 2)) {
+                        [self.buttons[index + 1] setEnabled:YES];
+                    }
+                    
+                    self.selectedButton++;
+                }
+            }];
+        }
+    } failureBlock:^(NSError *error) {
+        NSLog(@"Failed to enumerate over assets library.");
+    }];
 }
 
 @end
