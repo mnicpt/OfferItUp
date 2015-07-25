@@ -1,5 +1,5 @@
-platform :ios, ‘8.0’
+platform :ios, '8.0'
 
-pod ‘FBSDKCoreKit’, ‘~> 4.4.0’
-pod ‘FBSDKLoginKit’, ‘~> 4.4.0’
-pod ‘FBSDKShareKit’, ‘~> 4.4.0’
+pod 'FBSDKCoreKit'
+pod 'FBSDKLoginKit'
+pod 'FBSDKShareKit'

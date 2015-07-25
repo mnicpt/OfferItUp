@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MobileCoreServices/MobileCoreServices.h>
+#import <Photos/Photos.h>
+#import <AssetsLibrary/AssetsLibrary.h>
 
-@interface ImageLoaderViewController : UIViewController
-
+@interface ImageLoaderViewController : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @end
 
