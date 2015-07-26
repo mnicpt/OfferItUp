@@ -10,6 +10,8 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 #import <Photos/Photos.h>
 #import <AssetsLibrary/AssetsLibrary.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+
 
 @interface ImageLoaderViewController : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 

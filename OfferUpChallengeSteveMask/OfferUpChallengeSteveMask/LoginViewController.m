@@ -76,7 +76,7 @@
         
         [self.loginManager logOut];
     } else {
-        [self.loginManager logInWithPublishPermissions:nil handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+        [self.loginManager logInWithPublishPermissions:@[@"publish_actions"] handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
             
             if (error) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Login Error"

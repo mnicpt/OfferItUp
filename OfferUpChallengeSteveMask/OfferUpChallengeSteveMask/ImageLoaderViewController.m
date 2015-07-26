@@ -14,6 +14,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *secondImageBtn;
 @property (strong, nonatomic) IBOutlet UIButton *thirdImageBtn;
 @property (strong, nonatomic) IBOutlet UIButton *fourthImageBtn;
+@property (strong, nonatomic) IBOutlet UIButton *uploadBtn;
 
 @property (strong, nonatomic) UIImagePickerController *imagePicker;
 @property (strong, nonatomic) NSArray *buttons;
@@ -38,7 +39,38 @@
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    
+
+    ALAssetsLibrary* assetsLibrary = [[ALAssetsLibrary alloc] init];
+    [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupAlbum usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
+        
+        if ([[group valueForProperty:ALAssetsGroupPropertyName] isEqualToString:@"OfferUp"]) {
+            [group enumerateAssetsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, group.numberOfAssets)] options:NSEnumerationConcurrent usingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
+                
+                if (index <= (self.buttons.count - 1)) {
+                    NSDictionary *params = @{@"source" : [UIImage imageWithCGImage:result.thumbnail]};
+                    
+                    // post images
+                    
+                    FBSDKGraphRequest *albumRequest = [[FBSDKGraphRequest alloc]
+                                                       initWithGraphPath:@"me/photos"
+                                                       parameters:params
+                                                       HTTPMethod:@"POST"];
+                    [albumRequest startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
+                                                               id result,
+                                                               NSError *error) {
+                        if (!error) {
+                            NSLog(@"Photo uploaded successfully in Facebook.");
+                        } else {
+                            NSLog(@"Error posting photo to Facebook.");
+                        }
+                        
+                    }];
+                }
+            }];
+        }
+    } failureBlock:^(NSError *error) {
+        NSLog(@"Failed to enumerate over assets library.");
+    }];
 }
 
 
@@ -55,9 +87,11 @@
     }];
     UIAlertAction *takePictureAction = [UIAlertAction actionWithTitle:@"Take Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         
+        [self takePhotoFromCamera];
     }];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         
+        [self dismissViewControllerAnimated:YES completion:nil];
     }];
 
     [actionSheet addAction:photoLibraryAction];
@@ -137,6 +171,8 @@
             PHObjectPlaceholder *assetPlaceholder = [createAssetRequest placeholderForCreatedAsset];
             [albumChangeRequest addAssets:@[ assetPlaceholder ]];
             
+            [self.uploadBtn setEnabled:YES];
+            
         } completionHandler:^(BOOL success, NSError *error) {
             NSLog(@"Finished adding asset. %@", (success ? @"Success" : error));
         }];
@@ -157,12 +193,17 @@
             ALAsset *asset = [[ALAsset alloc] init];
             [asset setImageData:UIImagePNGRepresentation(image) metadata:nil completionBlock:nil];
             [groupAlbum addAsset:asset];
+            
+            [self.uploadBtn setEnabled:YES];
+            
         } else {
             [assetsLibrary addAssetsGroupAlbumWithName:album resultBlock:^(ALAssetsGroup *group) {
                 
                 ALAsset *asset = [[ALAsset alloc] init];
                 [asset setImageData:UIImagePNGRepresentation(image) metadata:nil completionBlock:nil];
                 [group addAsset:asset];
+                
+                [self.uploadBtn setEnabled:YES];
                 
             } failureBlock:^(NSError *error) {
                 NSLog(@"Failed to create album");
@@ -195,7 +236,36 @@
         
         [self presentViewController:mediaUI animated:YES completion:nil];
     } else {
-        // sorry you deleted your Photos app
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"We're sorry." message:@"Photo Library is not available" preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }]];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+}
+
+-(void)takePhotoFromCamera {
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        
+        UIImagePickerController *cameraUI = [self imagePickerController];
+        cameraUI.delegate = self;
+        cameraUI.sourceType = UIImagePickerControllerSourceTypeCamera;
+        
+        cameraUI.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
+        
+        cameraUI.allowsEditing = NO;
+        
+        [self presentViewController:cameraUI animated:YES completion:nil];
+    } else {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"We're sorry." message:@"Camera is not available" preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }]];
+        
+        [self presentViewController:alert animated:YES completion:nil];
     }
 }
 
@@ -206,17 +276,19 @@
         if ([[group valueForProperty:ALAssetsGroupPropertyName] isEqualToString:@"OfferUp"]) {
             [group enumerateAssetsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, group.numberOfAssets)] options:NSEnumerationConcurrent usingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
                 
-                if (index <= (self.buttons.count - 1)) {
-                    [self.buttons[index] setBackgroundImage:[UIImage imageWithCGImage:result.thumbnail] forState:UIControlStateNormal];
-                    [self.buttons[index] setEnabled:YES];
-                    
-                    if (index <= (self.buttons.count - 2)) {
-                        [self.buttons[index + 1] setEnabled:YES];
+                    if (index <= (self.buttons.count - 1)) {
+                        [self.buttons[index] setBackgroundImage:[UIImage imageWithCGImage:result.thumbnail] forState:UIControlStateNormal];
+                        [self.buttons[index] setEnabled:YES];
+                        
+                        if (index <= (self.buttons.count - 2)) {
+                            [self.buttons[index + 1] setEnabled:YES];
+                        }
+                        
+                        self.selectedButton++;
                     }
-                    
-                    self.selectedButton++;
-                }
             }];
+            [self.uploadBtn setEnabled:YES];
+            [self.view updateConstraints];
         }
     } failureBlock:^(NSError *error) {
         NSLog(@"Failed to enumerate over assets library.");

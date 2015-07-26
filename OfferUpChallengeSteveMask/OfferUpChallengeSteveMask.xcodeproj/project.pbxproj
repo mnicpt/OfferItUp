@@ -16,7 +16,6 @@
 		5A3AE45A1B61CBB70059F0F8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5A3AE4581B61CBB70059F0F8 /* LaunchScreen.xib */; };
 		5A3AE4661B61CBB70059F0F8 /* OfferUpChallengeSteveMaskTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A3AE4651B61CBB70059F0F8 /* OfferUpChallengeSteveMaskTests.m */; };
 		5A3AE4711B61CCC10059F0F8 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A3AE4701B61CCC10059F0F8 /* LoginViewController.m */; };
-		5A3AE47B1B61E7AC0059F0F8 /* ConfirmationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A3AE47A1B61E7AC0059F0F8 /* ConfirmationViewController.m */; };
 		6FEDE6DD9F1A7CA9D19E0FDF /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C4DCF7DA0746ABA209A860D7 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -49,8 +48,6 @@
 		5A3AE4651B61CBB70059F0F8 /* OfferUpChallengeSteveMaskTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OfferUpChallengeSteveMaskTests.m; sourceTree = "<group>"; };
 		5A3AE46F1B61CCC10059F0F8 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		5A3AE4701B61CCC10059F0F8 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
-		5A3AE4791B61E7AC0059F0F8 /* ConfirmationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfirmationViewController.h; sourceTree = "<group>"; };
-		5A3AE47A1B61E7AC0059F0F8 /* ConfirmationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfirmationViewController.m; sourceTree = "<group>"; };
 		C4DCF7DA0746ABA209A860D7 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -137,8 +134,6 @@
 		5A3AE4721B61CCC90059F0F8 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				5A3AE4791B61E7AC0059F0F8 /* ConfirmationViewController.h */,
-				5A3AE47A1B61E7AC0059F0F8 /* ConfirmationViewController.m */,
 				5A3AE4501B61CBB70059F0F8 /* ImageLoaderViewController.h */,
 				5A3AE4511B61CBB70059F0F8 /* ImageLoaderViewController.m */,
 				5A3AE46F1B61CCC10059F0F8 /* LoginViewController.h */,
@@ -215,6 +210,7 @@
 				TargetAttributes = {
 					5A3AE4421B61CBB70059F0F8 = {
 						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = 97D3YVLC7M;
 					};
 					5A3AE45E1B61CBB70059F0F8 = {
 						CreatedOnToolsVersion = 6.4;
@@ -300,7 +296,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A3AE44C1B61CBB70059F0F8 /* AppDelegate.m in Sources */,
-				5A3AE47B1B61E7AC0059F0F8 /* ConfirmationViewController.m in Sources */,
 				5A3AE44F1B61CBB70059F0F8 /* OfferUpChallengeSteveMask.xcdatamodeld in Sources */,
 				5A3AE4521B61CBB70059F0F8 /* ImageLoaderViewController.m in Sources */,
 				5A3AE4491B61CBB70059F0F8 /* main.m in Sources */,
@@ -433,6 +428,8 @@
 			baseConfigurationReference = 2AD31583132B0EAFF5E64153 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/mnicpt/Documents/FacebookSDK,
@@ -440,6 +437,7 @@
 				INFOPLIST_FILE = OfferUpChallengeSteveMask/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -448,6 +446,8 @@
 			baseConfigurationReference = 237BD093DDF8E9F918ABD2CC /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/mnicpt/Documents/FacebookSDK,
@@ -455,6 +455,7 @@
 				INFOPLIST_FILE = OfferUpChallengeSteveMask/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
