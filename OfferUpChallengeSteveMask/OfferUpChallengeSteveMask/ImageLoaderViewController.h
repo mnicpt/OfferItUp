@@ -13,7 +13,7 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 
 
-@interface ImageLoaderViewController : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface ImageLoaderViewController : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate>
 
 @end
 

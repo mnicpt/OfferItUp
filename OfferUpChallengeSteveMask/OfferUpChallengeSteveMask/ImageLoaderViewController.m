@@ -38,40 +38,14 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-
-    ALAssetsLibrary* assetsLibrary = [[ALAssetsLibrary alloc] init];
-    [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupAlbum usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
-        
-        if ([[group valueForProperty:ALAssetsGroupPropertyName] isEqualToString:@"OfferUp"]) {
-            [group enumerateAssetsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, group.numberOfAssets)] options:NSEnumerationConcurrent usingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
-                
-                if (index <= (self.buttons.count - 1)) {
-                    NSDictionary *params = @{@"source" : [UIImage imageWithCGImage:result.thumbnail]};
-                    
-                    // post images
-                    
-                    
-                    FBSDKGraphRequest *albumRequest = [[FBSDKGraphRequest alloc]
-                                                       initWithGraphPath:@"me/photos"
-                                                       parameters:params
-                                                       HTTPMethod:@"POST"];
-                    [albumRequest startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
-                                                               id result,
-                                                               NSError *error) {
-                        if (!error) {
-                            NSLog(@"Photo uploaded successfully in Facebook.");
-                        } else {
-                            NSLog(@"Error posting photo to Facebook.");
-                        }
-                        
-                    }];
-                }
-            }];
-        }
-    } failureBlock:^(NSError *error) {
-        NSLog(@"Failed to enumerate over assets library.");
-    }];
+-(BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    NSError *error = [self uploadPhotos];
+    
+    if (error) {
+        return NO;
+    }
+    
+    return YES;
 }
 
 
@@ -140,6 +114,23 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+
+#pragma mark - UIAlertViewDelegate methods
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    switch (buttonIndex) {
+        case 0:
+            [alertView dismissWithClickedButtonIndex:buttonIndex animated:YES];
+            break;
+            
+        case 1:
+            [self uploadPhotos];
+            break;
+            
+        default:
+            break;
+    }
+}
 
 #pragma mark - Private methods
 
@@ -301,8 +292,8 @@
         
         if ([[group valueForProperty:ALAssetsGroupPropertyName] isEqualToString:@"OfferUp"]) {
             [group enumerateAssetsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, group.numberOfAssets)] options:NSEnumerationConcurrent usingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
-                
-                    if (index <= (self.buttons.count - 1)) {
+
+                    if (index < self.buttons.count) {
                         [self.buttons[index] setBackgroundImage:[UIImage imageWithCGImage:result.thumbnail] forState:UIControlStateNormal];
                         [self.buttons[index] setEnabled:YES];
                         
@@ -312,13 +303,58 @@
                         
                         self.selectedButton++;
                     }
+
             }];
+            
             [self.uploadBtn setEnabled:YES];
-            [self.view updateConstraints];
         }
     } failureBlock:^(NSError *error) {
         NSLog(@"Failed to enumerate over assets library.");
     }];
+}
+
+-(NSError*)uploadPhotos {
+    NSError *error = nil;
+    
+    ALAssetsLibrary* assetsLibrary = [[ALAssetsLibrary alloc] init];
+    [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupAlbum usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
+        
+        if ([[group valueForProperty:ALAssetsGroupPropertyName] isEqualToString:@"OfferUp"]) {
+            [group enumerateAssetsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, group.numberOfAssets)] options:NSEnumerationConcurrent usingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
+                
+                if (index < self.buttons.count) {
+                    NSDictionary *params = @{@"source" : [UIImage imageWithCGImage:result.thumbnail]};
+                    
+                    // post images
+                    FBSDKGraphRequest *albumRequest = [[FBSDKGraphRequest alloc]
+                                                       initWithGraphPath:@"me/photos"
+                                                       parameters:params
+                                                       HTTPMethod:@"POST"];
+                    [albumRequest startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,
+                                                               id result,
+                                                               NSError *error) {
+                        if (!error) {
+                            NSLog(@"Photo uploaded successfully in Facebook.");
+                        } else {
+                            NSLog(@"Error posting photo to Facebook.");
+                            error = [[NSError alloc] init];
+                            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Upload Error"
+                                                                            message:@"Would you like to try again?"
+                                                                           delegate:self
+                                                                  cancelButtonTitle:@"Cancel"
+                                                                  otherButtonTitles:@"Retry", nil];
+                            [alert show];
+                        }
+                        
+                    }];
+                }
+            }];
+        }
+    } failureBlock:^(NSError *error) {
+        NSLog(@"Failed to enumerate over assets library.");
+    }];
+    
+    return error;
 }
 
 @end

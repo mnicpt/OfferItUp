@@ -70,6 +70,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5A03D5031B65F3E50054FFCE /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Delegates;
+			sourceTree = "<group>";
+		};
 		5A3AE43A1B61CBB70059F0F8 = {
 			isa = PBXGroup;
 			children = (
@@ -93,6 +100,7 @@
 		5A3AE4451B61CBB70059F0F8 /* OfferUpChallengeSteveMask */ = {
 			isa = PBXGroup;
 			children = (
+				5A03D5031B65F3E50054FFCE /* Delegates */,
 				5A3AE4721B61CCC90059F0F8 /* ViewControllers */,
 				5A3AE44A1B61CBB70059F0F8 /* AppDelegate.h */,
 				5A3AE44B1B61CBB70059F0F8 /* AppDelegate.m */,

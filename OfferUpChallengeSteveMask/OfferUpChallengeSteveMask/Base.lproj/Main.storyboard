@@ -222,9 +222,6 @@
                                 <state key="normal" title="Done">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <connections>
-                                    <segue destination="gwj-uz-4Bn" kind="unwind" unwindAction="prepareForUnwind:" id="099-pp-bAS"/>
-                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -239,7 +236,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="TJI-mn-e94"/>
                     <connections>
-                        <segue destination="gwj-uz-4Bn" kind="unwind" unwindAction="prepareForUnwind:" id="Ier-NN-rzm"/>
+                        <segue destination="gwj-uz-4Bn" kind="unwind" unwindAction="prepareForUnwind:" id="E2r-6P-hgf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nuu-7v-RsB" userLabel="First Responder" sceneMemberID="firstResponder"/>
