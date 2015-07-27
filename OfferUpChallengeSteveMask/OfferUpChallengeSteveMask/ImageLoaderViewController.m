@@ -15,6 +15,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *thirdImageBtn;
 @property (strong, nonatomic) IBOutlet UIButton *fourthImageBtn;
 @property (strong, nonatomic) IBOutlet UIButton *uploadBtn;
+@property (strong, nonatomic) IBOutlet UIView *loadingView;
 
 @property (strong, nonatomic) UIImagePickerController *imagePicker;
 @property (strong, nonatomic) NSArray *buttons;
@@ -24,6 +25,16 @@
 
 @implementation ImageLoaderViewController
 
++ (ALAssetsLibrary *)defaultAssetsLibrary {
+    static dispatch_once_t pred = 0;
+    static ALAssetsLibrary *library = nil;
+    
+    dispatch_once(&pred, ^{
+        library = [[ALAssetsLibrary alloc] init];
+    });
+    return library;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -31,6 +42,12 @@
     self.selectedButton = 0;
     
     [self loadImages];
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
+    self.loadingView.hidden = YES;
+    
+    [super viewWillDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -96,14 +113,9 @@
   
         if (originalImage) {
             [self addNewAssetWithImage:originalImage toAlbum:@"OfferUp"];
-
-            UIImage *thumbnail = [[UIImage alloc] initWithData:UIImageJPEGRepresentation(originalImage, 1.0)];
-            [self.buttons[self.selectedButton] setBackgroundImage:thumbnail forState:UIControlStateNormal];
             
-            self.selectedButton++;
-            if ((self.buttons.count - 1) >= self.selectedButton) {
-                [self.buttons[self.selectedButton] setEnabled:YES];
-            }
+            NSData *thumbnail = UIImageJPEGRepresentation(originalImage, 1.0);
+            [self.buttons[self.selectedButton] setBackgroundImage:[UIImage imageWithData:thumbnail ] forState:UIControlStateNormal];
         }
     }
     
@@ -143,8 +155,7 @@
     }
 }
 
-- (void)addNewAssetWithImage:(UIImage *)image toAlbum:(NSString *)album
-{
+- (void)addNewAssetWithImage:(UIImage *)image toAlbum:(NSString *)album {
 //  UNCOMMENT WHEN READY TO SUPPORT iOS 9 since ALAssetsLibrary will be deprecated
     
 //    if ([PHPhotoLibrary respondsToSelector:@selector(sharedPhotoLibrary)]) {
@@ -189,8 +200,8 @@
 //        }];
 //    } else {
 
-    ALAssetsLibrary *assetsLibrary = [[ALAssetsLibrary alloc] init];
-    
+
+    ALAssetsLibrary * assetsLibrary = [ImageLoaderViewController defaultAssetsLibrary];
     // create album
     [assetsLibrary addAssetsGroupAlbumWithName:album resultBlock:^(ALAssetsGroup *group) {
         if (group) {
@@ -209,34 +220,35 @@
         if ([[group valueForProperty:ALAssetsGroupPropertyName] isEqualToString:album]) {
             albumGroup = group;
             
-            // write image to group
-            [assetsLibrary writeImageToSavedPhotosAlbum:image.CGImage orientation:(ALAssetOrientation)image.imageOrientation completionBlock:^(NSURL *assetURL, NSError *error) {
-                
-                [assetsLibrary assetForURL:assetURL resultBlock:^(ALAsset *asset) {
+            if (albumGroup.numberOfAssets > self.selectedButton) {
+                [albumGroup enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
                     
-                    if (albumGroup.numberOfAssets > self.selectedButton) {
-                        [albumGroup enumerateAssetsAtIndexes:[NSIndexSet indexSetWithIndex:self.selectedButton ] options:NSEnumerationConcurrent usingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
-                            [result setImageData:UIImageJPEGRepresentation(image, 1.0) metadata:nil completionBlock:^(NSURL *assetURL, NSError *error) {
-                                
-                            }];
-                        }];
-                    } else {
-                        [albumGroup addAsset:asset];
+                    if (result != nil && index == self.selectedButton) {
+                        [result setImageData:UIImageJPEGRepresentation(image, 1.0) metadata:nil completionBlock:nil];
                     }
-                    
-                    [self.uploadBtn setEnabled:YES];
-                    
-                } failureBlock:^(NSError *error) {
-                    NSLog(@"Failed to save image to album.");
                 }];
-            }];
+                
+            } else {
+                // write image to group
+                [assetsLibrary writeImageToSavedPhotosAlbum:image.CGImage orientation:(ALAssetOrientation)image.imageOrientation completionBlock:^(NSURL *assetURL, NSError *error) {
+                    
+                    [assetsLibrary assetForURL:assetURL resultBlock:^(ALAsset *asset) {
+                        [albumGroup addAsset:asset];
+                    } failureBlock:^(NSError *error) {
+                        NSLog(@"Failed to save image to album.");
+                    }];
+                }];
+            }
+            self.selectedButton++;
+            if ((self.buttons.count - 1) >= self.selectedButton) {
+                [self.buttons[self.selectedButton] setEnabled:YES];
+            }
+            [self.uploadBtn setEnabled:YES];
         }
         
     } failureBlock:^(NSError *error) {
         NSLog(@"Failed to enumerate over assets library.");
     }];
-    
-
 //    }
 }
 
@@ -287,23 +299,25 @@
 }
 
 -(void)loadImages {
-    ALAssetsLibrary* assetsLibrary = [[ALAssetsLibrary alloc] init];
+    ALAssetsLibrary * assetsLibrary = [ImageLoaderViewController defaultAssetsLibrary];
     [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupAlbum usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
         
         if ([[group valueForProperty:ALAssetsGroupPropertyName] isEqualToString:@"OfferUp"]) {
-            [group enumerateAssetsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, group.numberOfAssets)] options:NSEnumerationConcurrent usingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
-
-                    if (index < self.buttons.count) {
-                        [self.buttons[index] setBackgroundImage:[UIImage imageWithCGImage:result.thumbnail] forState:UIControlStateNormal];
-                        [self.buttons[index] setEnabled:YES];
-                        
-                        if (index <= (self.buttons.count - 2)) {
-                            [self.buttons[index + 1] setEnabled:YES];
-                        }
-                        
-                        self.selectedButton++;
+            
+            __block int i = 0;
+            [group enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
+                
+                if (result != nil) {
+                    [self.buttons[i] setBackgroundImage:[UIImage imageWithCGImage:result.thumbnail] forState:UIControlStateNormal];
+                    [self.buttons[i] setEnabled:YES];
+                    
+                    if (i <= (self.buttons.count - 2)) {
+                        [self.buttons[i + 1] setEnabled:YES];
                     }
-
+                    
+                    i++;
+                    self.selectedButton++;
+                }
             }];
             
             [self.uploadBtn setEnabled:YES];
@@ -315,14 +329,16 @@
 
 -(NSError*)uploadPhotos {
     NSError *error = nil;
+    self.loadingView.hidden = NO;
     
-    ALAssetsLibrary* assetsLibrary = [[ALAssetsLibrary alloc] init];
+    ALAssetsLibrary * assetsLibrary = [ImageLoaderViewController defaultAssetsLibrary];
     [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupAlbum usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
-        
+
         if ([[group valueForProperty:ALAssetsGroupPropertyName] isEqualToString:@"OfferUp"]) {
-            [group enumerateAssetsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, group.numberOfAssets)] options:NSEnumerationConcurrent usingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
+            [group enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
                 
-                if (index < self.buttons.count) {
+                if (result != nil) {
+                    
                     NSDictionary *params = @{@"source" : [UIImage imageWithCGImage:result.thumbnail]};
                     
                     // post images
@@ -348,6 +364,7 @@
                         
                     }];
                 }
+
             }];
         }
     } failureBlock:^(NSError *error) {
