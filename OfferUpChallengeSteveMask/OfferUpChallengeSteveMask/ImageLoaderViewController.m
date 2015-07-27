@@ -51,6 +51,7 @@
                     
                     // post images
                     
+                    
                     FBSDKGraphRequest *albumRequest = [[FBSDKGraphRequest alloc]
                                                        initWithGraphPath:@"me/photos"
                                                        parameters:params
@@ -98,6 +99,11 @@
     [actionSheet addAction:takePictureAction];
     [actionSheet addAction:cancelAction];
     
+    UIPopoverPresentationController *popOverController = actionSheet.popoverPresentationController;
+    popOverController.sourceView = self.buttons[self.selectedButton];
+    popOverController.sourceRect = ((UIButton*)self.buttons[self.selectedButton]).bounds;
+    popOverController.permittedArrowDirections = UIPopoverArrowDirectionUp;
+    
     [self presentViewController:actionSheet animated:YES completion:nil];
 }
 
@@ -134,83 +140,6 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)addNewAssetWithImage:(UIImage *)image toAlbum:(NSString *)album
-{
-    if ([PHPhotoLibrary respondsToSelector:@selector(sharedPhotoLibrary)]) {
-        [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-            // Fetch album
-            PHFetchResult *fetchResult = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAny options:nil];
-            
-            __block PHAssetCollection *assetCollection = nil;
-            
-            [fetchResult enumerateObjectsUsingBlock:^(PHAssetCollection *obj, NSUInteger idx, BOOL *stop) {
-                if ([obj.localizedTitle isEqualToString:album]) {
-                    assetCollection = obj;
-                    *stop = YES;
-                }
-            }];
-            
-            PHAssetCollectionChangeRequest *albumChangeRequest;
-
-            if (assetCollection) {
-                // Request editing the album.
-                albumChangeRequest = [PHAssetCollectionChangeRequest changeRequestForAssetCollection:assetCollection];
-            } else {
-                // Request new album if not present
-                albumChangeRequest = [PHAssetCollectionChangeRequest creationRequestForAssetCollectionWithTitle:album];
-            }
-            // remove asset of one exists
-            if (assetCollection.estimatedAssetCount > self.selectedButton) {
-                [albumChangeRequest removeAssetsAtIndexes:[NSIndexSet indexSetWithIndex:self.selectedButton]];
-            }
-            
-            // Request creating an asset from the image.
-            PHAssetChangeRequest *createAssetRequest = [PHAssetChangeRequest creationRequestForAssetFromImage:image];
-            
-            // Get a placeholder for the new asset and add it to the album editing request.
-            PHObjectPlaceholder *assetPlaceholder = [createAssetRequest placeholderForCreatedAsset];
-            [albumChangeRequest addAssets:@[ assetPlaceholder ]];
-            
-            [self.uploadBtn setEnabled:YES];
-            
-        } completionHandler:^(BOOL success, NSError *error) {
-            NSLog(@"Finished adding asset. %@", (success ? @"Success" : error));
-        }];
-    } else {
-        __block ALAssetsGroup *groupAlbum = nil;
-        ALAssetsLibrary *assetsLibrary = [[ALAssetsLibrary alloc] init];
-        [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupAlbum usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
-            
-            if ([[group valueForProperty:ALAssetsGroupPropertyName] isEqualToString:album]) {
-                groupAlbum = group;
-                *stop = YES;
-            }
-        } failureBlock:^(NSError *error) {
-            NSLog(@"Failed to enumerate over assets library.");
-        }];
-        
-        if (groupAlbum) {
-            ALAsset *asset = [[ALAsset alloc] init];
-            [asset setImageData:UIImagePNGRepresentation(image) metadata:nil completionBlock:nil];
-            [groupAlbum addAsset:asset];
-            
-            [self.uploadBtn setEnabled:YES];
-            
-        } else {
-            [assetsLibrary addAssetsGroupAlbumWithName:album resultBlock:^(ALAssetsGroup *group) {
-                
-                ALAsset *asset = [[ALAsset alloc] init];
-                [asset setImageData:UIImagePNGRepresentation(image) metadata:nil completionBlock:nil];
-                [group addAsset:asset];
-                
-                [self.uploadBtn setEnabled:YES];
-                
-            } failureBlock:^(NSError *error) {
-                NSLog(@"Failed to create album");
-            }];
-        }
-    }
-}
 
 #pragma mark - Private methods
 
@@ -219,8 +148,105 @@
         return self.imagePicker;
     } else {
         self.imagePicker = [[UIImagePickerController alloc] init];
-        return  self.imagePicker;
+        return self.imagePicker;
     }
+}
+
+- (void)addNewAssetWithImage:(UIImage *)image toAlbum:(NSString *)album
+{
+//  UNCOMMENT WHEN READY TO SUPPORT iOS 9 since ALAssetsLibrary will be deprecated
+    
+//    if ([PHPhotoLibrary respondsToSelector:@selector(sharedPhotoLibrary)]) {
+//        [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+//            // Fetch album
+//            PHFetchResult *fetchResult = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAny options:nil];
+//            
+//            __block PHAssetCollection *assetCollection = nil;
+//            
+//            [fetchResult enumerateObjectsUsingBlock:^(PHAssetCollection *obj, NSUInteger idx, BOOL *stop) {
+//                if ([obj.localizedTitle isEqualToString:album]) {
+//                    assetCollection = obj;
+//                    *stop = YES;
+//                }
+//            }];
+//            
+//            PHAssetCollectionChangeRequest *albumChangeRequest;
+//
+//            if (assetCollection) {
+//                // Request editing the album.
+//                albumChangeRequest = [PHAssetCollectionChangeRequest changeRequestForAssetCollection:assetCollection];
+//            } else {
+//                // Request new album if not present
+//                albumChangeRequest = [PHAssetCollectionChangeRequest creationRequestForAssetCollectionWithTitle:album];
+//            }
+//            // remove asset of one exists
+//            if (assetCollection.estimatedAssetCount > self.selectedButton) {
+//                [albumChangeRequest removeAssetsAtIndexes:[NSIndexSet indexSetWithIndex:self.selectedButton]];
+//            }
+//            
+//            // Request creating an asset from the image.
+//            PHAssetChangeRequest *createAssetRequest = [PHAssetChangeRequest creationRequestForAssetFromImage:image];
+//            
+//            // Get a placeholder for the new asset and add it to the album editing request.
+//            PHObjectPlaceholder *assetPlaceholder = [createAssetRequest placeholderForCreatedAsset];
+//            [albumChangeRequest addAssets:@[ assetPlaceholder ]];
+//            
+//            [self.uploadBtn setEnabled:YES];
+//            
+//        } completionHandler:^(BOOL success, NSError *error) {
+//            NSLog(@"Finished adding asset. %@", (success ? @"Success" : error));
+//        }];
+//    } else {
+
+    ALAssetsLibrary *assetsLibrary = [[ALAssetsLibrary alloc] init];
+    
+    // create album
+    [assetsLibrary addAssetsGroupAlbumWithName:album resultBlock:^(ALAssetsGroup *group) {
+        if (group) {
+            NSLog(@"Album %@ created.", album);
+        } else {
+            NSLog(@"Album %@ was already created.", album);
+        }
+    } failureBlock:^(NSError *error) {
+        NSLog(@"Failed to create album");
+    }];
+    
+    // get the album
+    __block ALAssetsGroup *albumGroup;
+    [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupAlbum usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
+        
+        if ([[group valueForProperty:ALAssetsGroupPropertyName] isEqualToString:album]) {
+            albumGroup = group;
+            
+            // write image to group
+            [assetsLibrary writeImageToSavedPhotosAlbum:image.CGImage orientation:(ALAssetOrientation)image.imageOrientation completionBlock:^(NSURL *assetURL, NSError *error) {
+                
+                [assetsLibrary assetForURL:assetURL resultBlock:^(ALAsset *asset) {
+                    
+                    if (albumGroup.numberOfAssets > self.selectedButton) {
+                        [albumGroup enumerateAssetsAtIndexes:[NSIndexSet indexSetWithIndex:self.selectedButton ] options:NSEnumerationConcurrent usingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
+                            [result setImageData:UIImageJPEGRepresentation(image, 1.0) metadata:nil completionBlock:^(NSURL *assetURL, NSError *error) {
+                                
+                            }];
+                        }];
+                    } else {
+                        [albumGroup addAsset:asset];
+                    }
+                    
+                    [self.uploadBtn setEnabled:YES];
+                    
+                } failureBlock:^(NSError *error) {
+                    NSLog(@"Failed to save image to album.");
+                }];
+            }];
+        }
+        
+    } failureBlock:^(NSError *error) {
+        NSLog(@"Failed to enumerate over assets library.");
+    }];
+    
+
+//    }
 }
 
 -(void)pickPhotoFromLibrary {

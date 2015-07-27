@@ -185,10 +185,10 @@
             </objects>
             <point key="canvasLocation" x="2547" y="313"/>
         </scene>
-        <!--Confirmation View Controller-->
+        <!--View Controller-->
         <scene sceneID="zIA-oY-V6B">
             <objects>
-                <viewController id="e6k-Gf-jUh" customClass="ConfirmationViewController" sceneMemberID="viewController">
+                <viewController id="e6k-Gf-jUh" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="cV4-43-KIw"/>
                         <viewControllerLayoutGuide type="bottom" id="Xha-Nx-j3A"/>
@@ -223,7 +223,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="BYZ-38-t0r" kind="show" id="psi-aV-7KQ"/>
+                                    <segue destination="gwj-uz-4Bn" kind="unwind" unwindAction="prepareForUnwind:" id="099-pp-bAS"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -238,8 +238,12 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="TJI-mn-e94"/>
+                    <connections>
+                        <segue destination="gwj-uz-4Bn" kind="unwind" unwindAction="prepareForUnwind:" id="Ier-NN-rzm"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nuu-7v-RsB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="gwj-uz-4Bn" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="4043" y="313"/>
         </scene>
@@ -302,7 +306,4 @@
         <image name="icon_ImageBox" width="60" height="60"/>
         <image name="icon_ImageBox_disabled" width="60" height="60"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="psi-aV-7KQ"/>
-    </inferredMetricsTieBreakers>
 </document>
