@@ -3,7 +3,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Login View Controller-->
@@ -94,7 +93,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="hTJ-d3-gF0" kind="show" id="Fbv-XY-gSI"/>
+                                    <segue destination="hTJ-d3-gF0" kind="show" identifier="finishedSegue" id="Fbv-XY-gSI"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="erd-Hn-urM">
@@ -154,10 +153,10 @@
                                 </connections>
                             </button>
                             <view hidden="YES" alpha="0.69999999999999973" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LRD-e5-V8a">
-                                <rect key="frame" x="16" y="64" width="568" height="536"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Uploading to Facebook..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jRo-nt-Xmb">
-                                        <rect key="frame" x="173" y="256" width="223" height="24"/>
+                                        <rect key="frame" x="189" y="176" width="223" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="223" id="bSg-6o-eYK"/>
                                             <constraint firstAttribute="height" constant="24" id="dfY-qp-Ale"/>
@@ -169,7 +168,7 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="centerY" secondItem="jRo-nt-Xmb" secondAttribute="centerY" id="5Td-Mg-rol"/>
+                                    <constraint firstAttribute="centerY" secondItem="jRo-nt-Xmb" secondAttribute="centerY" constant="80" id="5Td-Mg-rol"/>
                                     <constraint firstAttribute="centerX" secondItem="jRo-nt-Xmb" secondAttribute="centerX" id="tE0-Yt-ywL"/>
                                 </constraints>
                             </view>
@@ -184,14 +183,14 @@
                             <constraint firstItem="lOr-t8-rdj" firstAttribute="top" secondItem="7vT-zn-bhV" secondAttribute="bottom" constant="50" id="Gtw-FU-jOa"/>
                             <constraint firstAttribute="centerY" secondItem="erd-Hn-urM" secondAttribute="centerY" id="Kos-rQ-5aG"/>
                             <constraint firstItem="Pvg-ag-RxL" firstAttribute="baseline" secondItem="Gp7-EB-lGp" secondAttribute="baseline" id="KpE-hF-C7U"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="LRD-e5-V8a" secondAttribute="trailing" id="MQW-mq-w5Z"/>
+                            <constraint firstAttribute="trailing" secondItem="LRD-e5-V8a" secondAttribute="trailing" id="MQW-mq-w5Z"/>
                             <constraint firstAttribute="centerX" secondItem="vKH-lA-Xzr" secondAttribute="centerX" constant="34" id="NMQ-Kx-Y3v"/>
                             <constraint firstItem="erd-Hn-urM" firstAttribute="baseline" secondItem="vKH-lA-Xzr" secondAttribute="baseline" id="OAA-cf-eOd"/>
                             <constraint firstItem="JK2-Aa-hg4" firstAttribute="top" secondItem="LRD-e5-V8a" secondAttribute="bottom" id="SSD-mO-kpa"/>
                             <constraint firstAttribute="centerX" secondItem="lOr-t8-rdj" secondAttribute="centerX" id="bZ6-Qb-Vbl"/>
                             <constraint firstAttribute="centerX" secondItem="1Ic-dj-ZdT" secondAttribute="centerX" id="nQN-hW-Qoh"/>
                             <constraint firstItem="Pvg-ag-RxL" firstAttribute="leading" secondItem="vKH-lA-Xzr" secondAttribute="trailing" constant="8" symbolic="YES" id="uaE-r7-kbf"/>
-                            <constraint firstItem="LRD-e5-V8a" firstAttribute="leading" secondItem="3nn-hK-hg2" secondAttribute="leadingMargin" id="zWa-uT-YM0"/>
+                            <constraint firstItem="LRD-e5-V8a" firstAttribute="leading" secondItem="3nn-hK-hg2" secondAttribute="leading" id="zWa-uT-YM0"/>
                             <constraint firstItem="vKH-lA-Xzr" firstAttribute="baseline" secondItem="Pvg-ag-RxL" secondAttribute="baseline" id="zwj-ep-sKu"/>
                         </constraints>
                         <variation key="default">

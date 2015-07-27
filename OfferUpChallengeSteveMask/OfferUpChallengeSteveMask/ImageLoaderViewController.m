@@ -21,6 +21,8 @@
 @property (strong, nonatomic) NSArray *buttons;
 @property int selectedButton;
 
+@property BOOL finishedUploading;
+
 @end
 
 @implementation ImageLoaderViewController
@@ -40,6 +42,7 @@
     
     self.buttons = @[self.firstImageBtn, self.secondImageBtn, self.thirdImageBtn, self.fourthImageBtn];
     self.selectedButton = 0;
+    self.finishedUploading = NO;
     
     [self loadImages];
 }
@@ -58,7 +61,7 @@
 -(BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     NSError *error = [self uploadPhotos];
     
-    if (error) {
+    if (error || self.finishedUploading == NO) {
         return NO;
     }
     
@@ -334,6 +337,9 @@
     ALAssetsLibrary * assetsLibrary = [ImageLoaderViewController defaultAssetsLibrary];
     [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupAlbum usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
 
+        __block int count = 1;
+        __block int numberOfAssets = (int)group.numberOfAssets;
+        
         if ([[group valueForProperty:ALAssetsGroupPropertyName] isEqualToString:@"OfferUp"]) {
             [group enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
                 
@@ -351,6 +357,11 @@
                                                                NSError *error) {
                         if (!error) {
                             NSLog(@"Photo uploaded successfully in Facebook.");
+                            if (count == numberOfAssets) {
+                                self.finishedUploading = YES;
+                                [self performSegueWithIdentifier:@"finishedSegue" sender:self];
+                            }
+                            count++;
                         } else {
                             NSLog(@"Error posting photo to Facebook.");
                             error = [[NSError alloc] init];
